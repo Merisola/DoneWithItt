@@ -1,7 +1,8 @@
+// src/App.js
 import React from "react";
+import { LanguageProvider } from "./src/context/LanguageContext"; // This should work now
+import AppNavigator from "./src/navigation/AppNavigator"; // Adjust path as needed
 import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./src/navigation/AppNavigator"; // Path to AppNavigator
-import { LanguageProvider } from "./src/context/LanguageContext"; // Path to LanguageContext
 
 const App = () => {
   return (
