@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import translations from "../translation/translations";
+import { useLanguage } from "../context/LanguageContext";
 
 const ColorGame = () => {
-  // Function to generate random RGB color
+  // Function to generate a random RGB color
   const getRandomColor = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
@@ -10,17 +12,18 @@ const ColorGame = () => {
     return { rgbString: `rgb(${r}, ${g}, ${b})`, values: [r, g, b] };
   };
 
-  // State to hold target color and color options
+  const { language } = useLanguage(); // Get current language
+  const [difficulty, setDifficulty] = useState("Easy"); // Default difficulty
   const [targetColor, setTargetColor] = useState(getRandomColor());
   const [colorOptions, setColorOptions] = useState([]);
 
-  // Generate new set of color options and set target color
   const generateColors = () => {
+    const numChoices = difficulty === "Easy" ? 3 : 6; // Number of choices based on difficulty
     const newTarget = getRandomColor();
     const options = [newTarget];
 
-    // Generate 5 more random colors
-    while (options.length < 6) {
+    // Generate unique color options
+    while (options.length < numChoices) {
       const newColor = getRandomColor();
       if (!options.some((color) => color.rgbString === newColor.rgbString)) {
         options.push(newColor);
@@ -31,26 +34,44 @@ const ColorGame = () => {
     setTargetColor(newTarget);
   };
 
-  // Check the player's guess and give feedback
   const checkAnswer = (selectedColor) => {
-    if (selectedColor.rgbString === targetColor.rgbString) {
-      Alert.alert("Correct!", "You guessed the color correctly!");
-    } else {
-      Alert.alert("Try Again!", "Wrong guess. Keep trying!");
+    const message =
+      selectedColor.rgbString === targetColor.rgbString
+        ? translations[language].correct
+        : translations[language].wrong;
+
+    Alert.alert(message, translations[language].guessColor);
+    if (message === translations[language].correct) {
+      generateColors(); // Generate new colors after a correct guess
     }
   };
 
   useEffect(() => {
     generateColors();
-  }, []);
+  }, [difficulty]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Guess the Color!</Text>
-      {/* Display RGB string as the target, without showing the actual color */}
-      <Text style={styles.rgbDisplay}>
-        Target Color: {targetColor.rgbString}
-      </Text>
+      <Text style={styles.title}>{translations[language].title}</Text>
+      <Text style={styles.rgbText}>{`RGB(${targetColor.values.join(
+        ", "
+      )})`}</Text>
+      <View style={styles.difficultyContainer}>
+        {["Easy", "Hard"].map((level) => (
+          <TouchableOpacity
+            key={level}
+            onPress={() => setDifficulty(level)}
+            style={[
+              styles.difficultyButton,
+              difficulty === level && styles.activeButton,
+            ]}
+          >
+            <Text style={styles.buttonText}>
+              {translations[language][level.toLowerCase()]}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       <View style={styles.optionsContainer}>
         {colorOptions.map((color, index) => (
           <TouchableOpacity
@@ -61,7 +82,9 @@ const ColorGame = () => {
         ))}
       </View>
       <TouchableOpacity style={styles.newColorsButton} onPress={generateColors}>
-        <Text style={styles.buttonText}>New Colors</Text>
+        <Text style={styles.buttonText}>
+          {translations[language].newColors}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -72,17 +95,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "white",
+    marginBottom: 10,
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
   },
-  rgbDisplay: {
+  rgbText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "white",
     marginBottom: 20,
+  },
+  difficultyContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  difficultyButton: {
+    margin: 10,
+    padding: 10,
+    backgroundColor: "#007BFF",
+    borderRadius: 5,
+  },
+  activeButton: {
+    backgroundColor: "#0056b3",
   },
   optionsContainer: {
     flexDirection: "row",

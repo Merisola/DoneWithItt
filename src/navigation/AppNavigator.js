@@ -1,17 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import ColorGame from "../screens/ColorGame";
+import ColorGame from "../screens/ColorGame"; // Adjust path as needed
+// Import other screens as needed
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="ColorGame" component={ColorGame} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen name="ColorGame" component={ColorGame} />
+      {/* Add other screens here */}
+    </Stack.Navigator>
   );
 };
 
