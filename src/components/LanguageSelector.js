@@ -1,51 +1,30 @@
-// src/components/LanguageSelector.js
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useLanguage } from "../context/LanguageContext";
+import { View, Text, TouchableOpacity } from "react-native";
+import { styles } from "../Styles/gameStyles"; // Adjust the path if necessary
 
-const LanguageSelector = () => {
-  const { toggleLanguage } = useLanguage();
-
+const LanguageSelector = ({ setLanguage, language }) => {
   return (
-    <View style={styles.languageContainer}>
+    <View style={styles.languageSelectorContainer}>
       <TouchableOpacity
-        onPress={() => toggleLanguage("en")}
         style={styles.languageButton}
+        onPress={() => setLanguage("en")}
       >
-        <Text style={styles.buttonText}>EN</Text>
+        <Text style={styles.languageButtonText}>EN</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => toggleLanguage("fr")}
         style={styles.languageButton}
+        onPress={() => setLanguage("fr")}
       >
-        <Text style={styles.buttonText}>FR</Text>
+        <Text style={styles.languageButtonText}>FR</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => toggleLanguage("am")}
         style={styles.languageButton}
+        onPress={() => setLanguage("am")}
       >
-        <Text style={styles.buttonText}>AM</Text>
+        <Text style={styles.languageButtonText}>AMH</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  languageContainer: {
-    flexDirection: "row",
-    marginTop: 20,
-  },
-  languageButton: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: "#007BFF",
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
 
 export default LanguageSelector;

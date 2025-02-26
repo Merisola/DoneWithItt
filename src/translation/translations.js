@@ -1,30 +1,25 @@
+// translations.js
 const translations = {
   en: {
-    title: "Color Game",
-    correct: "Correct!",
-    wrong: "Wrong!",
-    guessColor: "Guess the color!",
+    title: "The Great Color Game",
+    tagline: "Can you guess the right color?",
+    instructions: "Instructions: Guess the RGB color!",
     easy: "Easy",
     hard: "Hard",
-    newColors: "New Colors",
-  },
-  am: {
-    title: "የቀለም ጨዋታ",
-    correct: "ትክክለኛ!",
-    wrong: "ይቅርታ!",
-    guessColor: "የቀለም አይነትን ገብስ!",
-    easy: "ቀላል",
-    hard: "ከባድ",
-    newColors: "አዲስ ቀለሞች",
   },
   fr: {
-    title: "Jeu de Couleurs",
-    correct: "Correct!",
-    wrong: "Faux!",
-    guessColor: "Devinez la couleur!",
+    title: "Le Grand Jeu des Couleurs",
+    tagline: "Pouvez-vous deviner la bonne couleur?",
+    instructions: "Instructions : Devinez la couleur RGB !",
     easy: "Facile",
     hard: "Difficile",
-    newColors: "Nouvelles Couleurs",
+  },
+  am: {
+    title: "ዋነኛ የቀለም ጨዋታ",
+    tagline: "መረጃ ቀለም ይገናኝ?",
+    instructions: "መመሪያዎች: RGB ቀለም ይወቁ!",
+    easy: "ቀላል",
+    hard: "ከባድ",
   },
 };
 

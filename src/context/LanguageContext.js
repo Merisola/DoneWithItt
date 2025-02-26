@@ -1,4 +1,4 @@
-// src/context/LanguageContext.js
+// LanguageContext.js
 import React, { createContext, useContext, useState } from "react";
 
 const LanguageContext = createContext();
@@ -13,4 +13,6 @@ export const LanguageProvider = ({ children }) => {
   );
 };
 
-export const useLanguage = () => useContext(LanguageContext);
+export const useLanguage = () => {
+  return useContext(LanguageContext);
+};
