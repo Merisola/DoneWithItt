@@ -1,8 +1,8 @@
 // PastPlayerScores.js
 import React from "react";
 import { View, Text, FlatList } from "react-native";
-import ScoreItem from "./ScoreItem"; // Import ScoreItem
-import { styles } from "../Styles/gameStyles"; // Ensure the path is correct
+import ScoreItem from "./ScoreItem";
+import { styles } from "../Styles/gameStyles";
 
 const PastPlayerScores = ({ playerScores }) => {
   return (

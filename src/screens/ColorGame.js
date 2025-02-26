@@ -12,7 +12,7 @@ import { useLanguage } from "../context/LanguageContext";
 import translations from "../translation/translations";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../Styles/gameStyles";
-import { db } from "../config/firebaseConfig"; // Import db
+import { db } from "../config/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import InstructionsModal from "../components/InstructionsModal";
 import PastPlayerScores from "../components/PastPlayerScores";
@@ -35,8 +35,7 @@ const ColorGame = () => {
 
   const instructionsText = `
     Hello! 
-    "Hello! ለ RGB የሚሆኑ ከፍተኛ እና ዝቅተኛ እሴቶችን ለማስገባት እና የሚሆኑ ቀለሞችን ለ ቀለም አስተዳደር እና ቀለም አስተዳደር እንዴት እንደሚሆኑ square RGB እንዴት እንደሚሆኑ ይማሩ።
-(Hint: The first number indicates the amount of RED, the second number indicates the amount of GREEN, while the third number indicates the amount of BLUE.)
+    Instructions: Guess the RGB color!
   `;
 
   const saveScore = async (userName, score) => {
@@ -100,41 +99,55 @@ const ColorGame = () => {
     setHasGuessed(true);
     if (selectedColor.rgbString === targetColor.rgbString) {
       setIsCorrect(true);
-      setHint("Correct!");
+      setHint(translations[language].correctHint);
       setScore(score + 1);
     } else {
       setIsCorrect(false);
       setHint(
-        `Try again! The correct color was RGB(${targetColor.values.join(", ")})`
+        `${translations[language].tryAgainHint} RGB(${targetColor.values.join(
+          ", "
+        )})`
       );
     }
   };
 
-  const handleTryAgainPress = () => {
+  const handleActionButtonPress = () => {
     animateButtonPress();
-    isCorrect ? generateColors() : checkAnswer(targetColor);
-  };
-
-  const handleNewColorsPress = () => {
-    animateButtonPress();
+    // Always generate new colors when the button is pressed
     generateColors();
+    // Clear hint when starting a new round
+    setHint("");
   };
 
   const finishGame = () => {
     if (userName.trim() === "") {
-      Alert.alert("Please enter your name before finishing the game.");
+      Alert.alert(translations[language].nameAlert);
       return;
     }
     saveScore(userName, score);
-    Alert.alert("Game Finished", "Thank you for playing!", [
-      {
-        text: "OK",
-        onPress: () => {
-          setUserName("");
-          setScore(0);
+    Alert.alert(
+      translations[language].gameFinished,
+      translations[language].thankYou,
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            // Reset all game states
+            setUserName("");
+            setScore(0);
+            setTargetColor(null);
+            setColorOptions([]);
+            setIsCorrect(false);
+            setHint("");
+            setHasGuessed(false);
+            // Clear feedback
+            setHint(""); // Clear any existing hints
+            setHasGuessed(false); // Reset guessing state
+            generateColors(); // Start a new game
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   useEffect(() => {
@@ -147,25 +160,21 @@ const ColorGame = () => {
       <View style={styles.header}>
         <Text style={styles.title}>{translations[language].title}</Text>
         <Text style={styles.tagline}>{translations[language].tagline}</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.instructionsLink}>
-            {translations[language].instructionsLink}
-          </Text>
-        </TouchableOpacity>
         <Text style={styles.rgbText}>
           {targetColor ? `RGB(${targetColor.values.join(", ")})` : ""}
         </Text>
       </View>
 
-      {/* Horizontal Layout */}
       <View style={styles.horizontalLayout}>
         <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
           <TouchableOpacity
             style={styles.newColorsButton}
-            onPress={handleNewColorsPress}
+            onPress={handleActionButtonPress}
           >
             <Text style={styles.buttonText}>
-              {isCorrect ? "Play Again?" : "New Colors"}
+              {isCorrect
+                ? translations[language].playAgain
+                : translations[language].newColors}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -205,23 +214,22 @@ const ColorGame = () => {
       </View>
 
       <TextInput
-        placeholder="Enter your name"
+        placeholder={translations[language].enterYourName}
         value={userName}
         onChangeText={setUserName}
         style={styles.input}
       />
 
-      {/* Button to toggle past scores visibility */}
       <TouchableOpacity onPress={() => setShowScores(!showScores)}>
         <Text style={styles.buttonText}>
-          {showScores ? "Hide Past Scores" : "Show Past Scores"}
+          {showScores
+            ? translations[language].hidePastScores
+            : translations[language].showPastScores}
         </Text>
       </TouchableOpacity>
 
-      {/* Fetch Scores Component */}
       <FetchScores setPlayerScores={setPlayerScores} />
 
-      {/* Conditionally render PastPlayerScores based on showScores state */}
       {showScores && <PastPlayerScores playerScores={playerScores} />}
 
       <FlatList
@@ -232,28 +240,13 @@ const ColorGame = () => {
             onPress={() => checkAnswer(item)}
           />
         )}
-        keyExtractor={(item) => item.rgbString} // Improved key extraction
+        keyExtractor={(item) => item.rgbString}
         numColumns={3}
         contentContainerStyle={{
           justifyContent: "space-around",
           paddingBottom: 20,
         }}
       />
-
-      <View style={styles.buttonContainer}>
-        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-          <TouchableOpacity
-            style={styles.tryAgainButton}
-            onPress={handleTryAgainPress}
-          >
-            <Text style={styles.buttonText}>
-              {isCorrect
-                ? translations[language].playAgain
-                : translations[language].tryAgain}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
 
       <View style={styles.feedbackContainer}>
         {hasGuessed && (
@@ -267,7 +260,9 @@ const ColorGame = () => {
       </View>
 
       <TouchableOpacity onPress={finishGame} style={styles.finishGameButton}>
-        <Text style={styles.buttonText}>Finish Game</Text>
+        <Text style={styles.buttonText}>
+          {translations[language].finishGame}
+        </Text>
       </TouchableOpacity>
 
       <InstructionsModal

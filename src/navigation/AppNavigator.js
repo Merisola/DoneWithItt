@@ -1,7 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ColorGame from "../screens/ColorGame"; // Adjust path as needed
-// Import other screens as needed
+import ColorGame from "../screens/ColorGame";
 
 const Stack = createStackNavigator();
 

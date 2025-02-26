@@ -1,6 +1,4 @@
 import { StyleSheet } from "react-native";
-
-// Common styles
 const commonButtonStyles = {
   borderRadius: 3,
   padding: 3,
@@ -11,7 +9,7 @@ const commonButtonStyles = {
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start", // Align items to the top
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#333",
     paddingTop: 0,
@@ -44,7 +42,7 @@ export const styles = StyleSheet.create({
   languageButtonText: {
     fontSize: 10,
     color: "#fff",
-    marginHorizontal: 5, // Adjusted spacing between buttons
+    marginHorizontal: 5,
   },
   activeLanguage: {
     fontWeight: "bold",
@@ -61,9 +59,9 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   rgbText: {
-    fontSize: 25,
+    fontSize: 34,
     fontWeight: "bold",
-    color: "#FFD700",
+    color: "#fff",
   },
   colorBox: {
     width: "30%",
@@ -96,18 +94,18 @@ export const styles = StyleSheet.create({
   },
   newColorsButton: {
     ...commonButtonStyles,
-    marginHorizontal: 7, // Spacing between buttons
-    backgroundColor: "transparent", // Removed background color
+    marginHorizontal: 7,
+    backgroundColor: "transparent",
   },
   tryAgainButton: {
     ...commonButtonStyles,
-    marginHorizontal: 5, // Spacing between buttons
-    backgroundColor: "transparent", // Removed background color
+    marginHorizontal: 5,
+    backgroundColor: "transparent",
   },
   finishGameButton: {
     ...commonButtonStyles,
-    marginVertical: 20, // Add vertical margin specifically for the Finish Game button
-    backgroundColor: "transparent", // Adjust as needed
+    marginVertical: 20,
+    backgroundColor: "transparent",
   },
   buttonText: {
     color: "#fff",
@@ -128,13 +126,13 @@ export const styles = StyleSheet.create({
   difficultyContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "30%", // Adjusted width for better alignment
+    width: "30%",
   },
   difficultyButton: {
     ...commonButtonStyles,
     flex: 1,
-    marginHorizontal: 3, // Spacing between difficulty buttons
-    backgroundColor: "transparent", // Removed background color
+    marginHorizontal: 3,
+    backgroundColor: "transparent",
   },
   activeDifficulty: {
     backgroundColor: "#FFD700",
@@ -146,8 +144,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 0,
     width: "100%",
-    backgroundColor: "#555", // Common background color for all buttons
-    padding: 10, // Padding for better spacing
+    backgroundColor: "#555",
+    padding: 10,
     borderRadius: 3,
   },
   feedbackText: {
@@ -155,7 +153,6 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     marginVertical: 50,
   },
-  // Modal Styles
   modalView: {
     margin: 10,
     backgroundColor: "white",

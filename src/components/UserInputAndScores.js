@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, FlatList } from "react-native";
-import ScoreItem from "./ScoreItem"; // Import ScoreItem
-import { styles } from "../Styles/gameStyles"; // Ensure the path is correct
+import ScoreItem from "./ScoreItem";
+import { styles } from "../Styles/gameStyles";
 
 const UserInputAndScores = ({ userName, setUserName, playerScores }) => {
   return (
@@ -16,9 +16,9 @@ const UserInputAndScores = ({ userName, setUserName, playerScores }) => {
           borderColor: "gray",
           padding: 5,
           marginBottom: 20,
-          width: "33%", // Adjust width for better alignment
+          width: "40%",
           borderRadius: 5,
-          backgroundColor: "#fff", // Background color for the input
+          backgroundColor: "#fff",
         }}
       />
 
