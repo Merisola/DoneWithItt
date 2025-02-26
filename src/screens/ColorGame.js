@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
+  Modal,
   Alert,
 } from "react-native";
 import { useLanguage } from "../context/LanguageContext";
@@ -20,10 +21,10 @@ const ColorGame = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [hint, setHint] = useState("");
   const [hasGuessed, setHasGuessed] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Animation values
   const buttonScale = new Animated.Value(1);
-  const rgbAnim = new Animated.Value(0);
 
   const getRandomColor = () => {
     const r = Math.floor(Math.random() * 256);
@@ -73,7 +74,7 @@ const ColorGame = () => {
     setHasGuessed(true);
     if (selectedColor.rgbString === targetColor.rgbString) {
       setIsCorrect(true);
-      setHint("");
+      setHint("Correct!");
     } else {
       setIsCorrect(false);
       setHint("Try again! Remember, it's RGB values!");
@@ -90,6 +91,18 @@ const ColorGame = () => {
     generateColors();
   };
 
+  const finishGame = () => {
+    Alert.alert("Game Finished", "Thank you for playing!", [
+      {
+        text: "OK",
+        onPress: () => {
+          // Optionally reset or navigate away
+          // For example, reset the game state or navigate to a home screen
+        },
+      },
+    ]);
+  };
+
   useEffect(() => {
     generateColors();
   }, [difficulty]);
@@ -100,9 +113,7 @@ const ColorGame = () => {
       <View style={styles.header}>
         <Text style={styles.title}>{translations[language].title}</Text>
         <Text style={styles.tagline}>{translations[language].tagline}</Text>
-        <TouchableOpacity
-          onPress={() => Alert.alert(translations[language].instructions)}
-        >
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Text style={styles.instructionsLink}>
             {translations[language].instructionsLink}
           </Text>
@@ -113,60 +124,70 @@ const ColorGame = () => {
         </Text>
       </View>
 
-      {/* Language Selection */}
-      <View style={styles.languageButtons}>
-        <TouchableOpacity onPress={() => setLanguage("en")}>
-          <Text
-            style={[
-              styles.languageButtonText,
-              language === "en" && styles.activeLanguage,
-            ]}
+      {/* New Colors Button, Language Selection, and Difficulty Selection */}
+      <View style={styles.horizontalLayout}>
+        <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
+          <TouchableOpacity
+            style={styles.newColorsButton}
+            onPress={handleNewColorsPress}
           >
-            EN
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setLanguage("fr")}>
-          <Text
+            <Text style={styles.buttonText}>
+              {isCorrect ? "Play Again?" : "New Colors"}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={styles.languageButtons}>
+          <TouchableOpacity onPress={() => setLanguage("en")}>
+            <Text
+              style={[
+                styles.languageButtonText,
+                language === "en" && styles.activeLanguage,
+              ]}
+            >
+              EN
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setLanguage("fr")}>
+            <Text
+              style={[
+                styles.languageButtonText,
+                language === "fr" && styles.activeLanguage,
+              ]}
+            >
+              FR
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setLanguage("am")}>
+            <Text
+              style={[
+                styles.languageButtonText,
+                language === "am" && styles.activeLanguage,
+              ]}
+            >
+              AMH
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.difficultyContainer}>
+          <TouchableOpacity
             style={[
-              styles.languageButtonText,
-              language === "fr" && styles.activeLanguage,
+              styles.difficultyButton,
+              difficulty === "Easy" && styles.activeDifficulty,
             ]}
+            onPress={() => setDifficulty("Easy")}
           >
-            FR
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setLanguage("am")}>
-          <Text
+            <Text style={styles.buttonText}>{translations[language].easy}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
-              styles.languageButtonText,
-              language === "am" && styles.activeLanguage,
+              styles.difficultyButton,
+              difficulty === "Hard" && styles.activeDifficulty,
             ]}
+            onPress={() => setDifficulty("Hard")}
           >
-            AMH
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Difficulty Selection */}
-      <View style={styles.difficultyContainer}>
-        <TouchableOpacity
-          style={[
-            styles.difficultyButton,
-            difficulty === "Easy" && styles.activeDifficulty,
-          ]}
-          onPress={() => setDifficulty("Easy")}
-        >
-          <Text style={styles.buttonText}>{translations[language].easy}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.difficultyButton,
-            difficulty === "Hard" && styles.activeDifficulty,
-          ]}
-          onPress={() => setDifficulty("Hard")}
-        >
-          <Text style={styles.buttonText}>{translations[language].hard}</Text>
-        </TouchableOpacity>
+            <Text style={styles.buttonText}>{translations[language].hard}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Color Options Grid */}
@@ -179,22 +200,12 @@ const ColorGame = () => {
           />
         )}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={3} // Three columns for the grid
+        numColumns={3}
         contentContainerStyle={{
-          justifyContent: "space-around", // Space items evenly
-          paddingBottom: 20, // Add bottom padding for spacing
+          justifyContent: "space-around",
+          paddingBottom: 20,
         }}
       />
-
-      {/* New Colors Button */}
-      <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
-        <TouchableOpacity
-          style={styles.newColorsButton}
-          onPress={handleNewColorsPress}
-        >
-          <Text style={styles.buttonText}>New Colors</Text>
-        </TouchableOpacity>
-      </Animated.View>
 
       {/* Button Container */}
       <View style={styles.buttonContainer}>
@@ -214,7 +225,7 @@ const ColorGame = () => {
 
       {/* Feedback Section */}
       <View style={styles.feedbackContainer}>
-        {hasGuessed && isCorrect !== null && (
+        {hasGuessed && (
           <Icon
             name={isCorrect ? "check" : "times"}
             size={30}
@@ -223,6 +234,31 @@ const ColorGame = () => {
         )}
         {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       </View>
+
+      {/* Finish Game Button */}
+      <TouchableOpacity onPress={finishGame}>
+        <Text style={styles.buttonText}>Finish Game</Text>
+      </TouchableOpacity>
+
+      {/* Modal for Game Instructions */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>
+            {translations[language].gameInstructions}
+          </Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.buttonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
