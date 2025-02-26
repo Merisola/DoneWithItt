@@ -1,16 +1,24 @@
 import { StyleSheet } from "react-native";
 
+// Common styles
+const commonButtonStyles = {
+  borderRadius: 5,
+  padding: 4,
+  elevation: 3,
+  marginVertical: 2,
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start", // Align items to the top
     alignItems: "center",
-    backgroundColor: "#333", // Darker background for contrast
-    paddingTop: 0, // Adjusted padding to give more space at the top
+    backgroundColor: "#333",
+    paddingTop: 0,
   },
   header: {
     width: "100%",
-    backgroundColor: "#00A0E1", // Header background color
+    backgroundColor: "#00A0E1",
     paddingVertical: 5,
     alignItems: "center",
     shadowColor: "#000",
@@ -21,45 +29,33 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "#fff", // White color for title
+    color: "#fff",
   },
   tagline: {
     fontSize: 14,
-    color: "#fff", // White for tagline
+    color: "#fff",
     marginBottom: 5,
   },
-  instructionsLink: {
-    fontSize: 10,
-    paddingVertical: 1,
-    color: "#FFD700", // Gold color for instructions link
-    textDecorationLine: "underline",
-  },
-  // Updated languageButtons style
   languageButtons: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 1, // Adjust margin to align with difficulty buttons
     marginVertical: 2,
   },
   languageButtonText: {
     fontSize: 10,
-    color: "#fff", // White text for language buttons
-    marginHorizontal: 1,
-    padding: 1,
-    borderRadius: 4,
-    backgroundColor: "#555", // Darker background for buttons
+    color: "#fff",
+    marginHorizontal: 5, // Adjusted spacing between buttons
   },
   activeLanguage: {
     fontWeight: "bold",
-    color: "#FFD700", // Gold color for active language
+    color: "#FFD700",
   },
   rgbDisplayContainer: {
-    marginTop: 3, // Positioned below the header
+    marginTop: 3,
     backgroundColor: "#444",
     paddingVertical: 3,
     paddingHorizontal: 20,
     borderRadius: 10,
-    borderWidth: 1,
     borderColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -67,35 +63,50 @@ export const styles = StyleSheet.create({
   rgbText: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "#FFD700", // Gold color for RGB text
+    color: "#FFD700",
   },
   colorBox: {
-    width: "30%", // Adjust width based on desired spacing
-    height: 95, // Consistent height for all boxes
-    margin: 5, // Margin to provide space around each box
+    width: "30%",
+    height: 95,
+    margin: 5,
     borderWidth: 0,
-    borderColor: "#fff", // White border for color boxes
     borderRadius: 15,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 200,
-    width: "80%", // Adjusted width
-    paddingHorizontal: 10,
+    marginTop: 20,
+    width: "80%",
+  },
+  scoresContainer: {
+    marginVertical: 1,
+    width: "50%",
+    alignItems: "center",
+  },
+  pastScoresTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 5,
+  },
+  scoreItem: {
+    color: "#fff",
+    fontSize: 14,
+    marginVertical: 2,
   },
   newColorsButton: {
-    backgroundColor: "#007bff", // Blue color for New Colors button
-    padding: 3,
-    borderRadius: 8,
-    elevation: 8,
-    marginTop: 2,
-    alignSelf: "center",
-    width: "100%", // Adjusted width for the button
+    ...commonButtonStyles,
+    marginHorizontal: 7, // Spacing between buttons
+    backgroundColor: "transparent", // Removed background color
+  },
+  tryAgainButton: {
+    ...commonButtonStyles,
+    marginHorizontal: 5, // Spacing between buttons
+    backgroundColor: "transparent", // Removed background color
   },
   buttonText: {
-    color: "#fff", // White text for buttons
-    fontSize: 10, // Adjusted font size
+    color: "#fff",
+    fontSize: 10,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -105,39 +116,37 @@ export const styles = StyleSheet.create({
   },
   hintText: {
     marginTop: 50,
-    color: "orange", // Orange color for hint text
-    fontSize: 10, // Adjusted font size
+    color: "orange",
+    fontSize: 10,
   },
   difficultyContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 0, // Set to 0 to remove space
-    paddingVertical: 0, // Set to 0 to remove space
-    width: "25%",
+    width: "30%", // Adjusted width for better alignment
   },
   difficultyButton: {
-    padding: 3,
-    borderRadius: 5,
-    backgroundColor: "#6c757d", // Grey background for difficulty buttons
-    elevation: 3,
+    ...commonButtonStyles,
     flex: 1,
-    marginHorizontal: 1,
-    marginVertical: 2,
+    marginHorizontal: 3, // Spacing between difficulty buttons
+    backgroundColor: "transparent", // Removed background color
   },
   activeDifficulty: {
-    backgroundColor: "#FFD700", // Gold color for active difficulty button
+    backgroundColor: "#FFD700",
     elevation: 4,
   },
   horizontalLayout: {
     flexDirection: "row",
-    justifyContent: "space-between", // Space elements evenly
-    alignItems: "center", // Center vertically
-    paddingHorizontal: 10, // Add horizontal padding
-    marginTop: 10, // Add some top margin
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginTop: 5,
+    width: "100%", // Full width for horizontal layout
+    backgroundColor: "#555", // Common background color for all buttons
+    padding: 10, // Padding for better spacing
+    borderRadius: 5, // Rounded corners for the layout
   },
   feedbackText: {
-    color: "orange", // Adjust color for feedback
-    marginLeft: 10, // Space between buttons and feedback
+    color: "orange",
+    marginLeft: 10,
     marginVertical: 50,
   },
   // Modal Styles
@@ -159,7 +168,7 @@ export const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16,
   },
   closeButton: {
     backgroundColor: "#2196F3",

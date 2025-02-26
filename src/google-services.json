@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1040625415213",
+    "project_id": "colorgame-a0c4e",
+    "storage_bucket": "colorgame-a0c4e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040625415213:android:d1517f8f04e1b4f744b4a4",
+        "android_client_info": {
+          "package_name": "com.merond.appname"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdHpAHaKM7iV8CdaNfQ4JoWyHmqgEoMGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

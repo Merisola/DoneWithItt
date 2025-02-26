@@ -5,13 +5,18 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
-  Modal,
   Alert,
+  TextInput,
 } from "react-native";
 import { useLanguage } from "../context/LanguageContext";
 import translations from "../translation/translations";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../Styles/gameStyles";
+import { db } from "../config/firebaseConfig"; // Import db
+import { collection, addDoc } from "firebase/firestore";
+import InstructionsModal from "../components/InstructionsModal";
+import PastPlayerScores from "../components/PastPlayerScores";
+import FetchScores from "../components/FetchScores";
 
 const ColorGame = () => {
   const { language, setLanguage } = useLanguage();
@@ -22,9 +27,30 @@ const ColorGame = () => {
   const [hint, setHint] = useState("");
   const [hasGuessed, setHasGuessed] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
-  // Animation values
+  const [userName, setUserName] = useState("");
+  const [score, setScore] = useState(0);
+  const [playerScores, setPlayerScores] = useState([]);
+  const [showScores, setShowScores] = useState(false);
   const buttonScale = new Animated.Value(1);
+
+  const instructionsText = `
+    Hello! 
+    አማርኛ እና አማርኛ ለማየት አንድ ሙሉ ስም እና ቀለም ወደ ኋላ ይሄዱ ይኖርብን ወቅታዊ ይደርሳል።
+    (Hint: The first number indicates the amount of RED, the second number indicates the amount of GREEN, while the third number indicates the amount of BLUE.)
+  `;
+
+  const saveScore = async (userName, score) => {
+    try {
+      const date = new Date().toISOString();
+      await addDoc(collection(db, "scores"), {
+        userName,
+        score,
+        date,
+      });
+    } catch (error) {
+      console.error("Error saving score:", error);
+    }
+  };
 
   const getRandomColor = () => {
     const r = Math.floor(Math.random() * 256);
@@ -75,9 +101,12 @@ const ColorGame = () => {
     if (selectedColor.rgbString === targetColor.rgbString) {
       setIsCorrect(true);
       setHint("Correct!");
+      setScore(score + 1);
     } else {
       setIsCorrect(false);
-      setHint("Try again! Remember, it's RGB values!");
+      setHint(
+        `Try again! The correct color was RGB(${targetColor.values.join(", ")})`
+      );
     }
   };
 
@@ -92,12 +121,17 @@ const ColorGame = () => {
   };
 
   const finishGame = () => {
+    if (userName.trim() === "") {
+      Alert.alert("Please enter your name before finishing the game.");
+      return;
+    }
+    saveScore(userName, score);
     Alert.alert("Game Finished", "Thank you for playing!", [
       {
         text: "OK",
         onPress: () => {
-          // Optionally reset or navigate away
-          // For example, reset the game state or navigate to a home screen
+          setUserName("");
+          setScore(0);
         },
       },
     ]);
@@ -105,11 +139,11 @@ const ColorGame = () => {
 
   useEffect(() => {
     generateColors();
+    setModalVisible(true);
   }, [difficulty]);
 
   return (
     <View style={styles.container}>
-      {/* Header Section */}
       <View style={styles.header}>
         <Text style={styles.title}>{translations[language].title}</Text>
         <Text style={styles.tagline}>{translations[language].tagline}</Text>
@@ -118,13 +152,31 @@ const ColorGame = () => {
             {translations[language].instructionsLink}
           </Text>
         </TouchableOpacity>
-        {/* RGB Display */}
         <Text style={styles.rgbText}>
           {targetColor ? `RGB(${targetColor.values.join(", ")})` : ""}
         </Text>
       </View>
 
-      {/* New Colors Button, Language Selection, and Difficulty Selection */}
+      <TextInput
+        placeholder="Enter your name"
+        value={userName}
+        onChangeText={setUserName}
+        style={styles.input}
+      />
+
+      {/* Button to toggle past scores visibility */}
+      <TouchableOpacity onPress={() => setShowScores(!showScores)}>
+        <Text style={styles.buttonText}>
+          {showScores ? "Hide Past Scores" : "Show Past Scores"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Fetch Scores Component */}
+      <FetchScores setPlayerScores={setPlayerScores} />
+
+      {/* Conditionally render PastPlayerScores based on showScores state */}
+      {showScores && <PastPlayerScores playerScores={playerScores} />}
+
       <View style={styles.horizontalLayout}>
         <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
           <TouchableOpacity
@@ -136,38 +188,19 @@ const ColorGame = () => {
             </Text>
           </TouchableOpacity>
         </Animated.View>
+
         <View style={styles.languageButtons}>
           <TouchableOpacity onPress={() => setLanguage("en")}>
-            <Text
-              style={[
-                styles.languageButtonText,
-                language === "en" && styles.activeLanguage,
-              ]}
-            >
-              EN
-            </Text>
+            <Text style={styles.languageButtonText}>EN</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setLanguage("fr")}>
-            <Text
-              style={[
-                styles.languageButtonText,
-                language === "fr" && styles.activeLanguage,
-              ]}
-            >
-              FR
-            </Text>
+            <Text style={styles.languageButtonText}>FR</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setLanguage("am")}>
-            <Text
-              style={[
-                styles.languageButtonText,
-                language === "am" && styles.activeLanguage,
-              ]}
-            >
-              AMH
-            </Text>
+            <Text style={styles.languageButtonText}>AMH</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.difficultyContainer}>
           <TouchableOpacity
             style={[
@@ -190,7 +223,6 @@ const ColorGame = () => {
         </View>
       </View>
 
-      {/* Color Options Grid */}
       <FlatList
         data={colorOptions}
         renderItem={({ item }) => (
@@ -199,7 +231,7 @@ const ColorGame = () => {
             onPress={() => checkAnswer(item)}
           />
         )}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.rgbString} // Improved key extraction
         numColumns={3}
         contentContainerStyle={{
           justifyContent: "space-around",
@@ -207,7 +239,6 @@ const ColorGame = () => {
         }}
       />
 
-      {/* Button Container */}
       <View style={styles.buttonContainer}>
         <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
           <TouchableOpacity
@@ -223,7 +254,6 @@ const ColorGame = () => {
         </Animated.View>
       </View>
 
-      {/* Feedback Section */}
       <View style={styles.feedbackContainer}>
         {hasGuessed && (
           <Icon
@@ -235,30 +265,15 @@ const ColorGame = () => {
         {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       </View>
 
-      {/* Finish Game Button */}
       <TouchableOpacity onPress={finishGame}>
         <Text style={styles.buttonText}>Finish Game</Text>
       </TouchableOpacity>
 
-      {/* Modal for Game Instructions */}
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <InstructionsModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>
-            {translations[language].gameInstructions}
-          </Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.buttonText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+        onClose={() => setModalVisible(false)}
+        instructions={instructionsText}
+      />
     </View>
   );
 };
