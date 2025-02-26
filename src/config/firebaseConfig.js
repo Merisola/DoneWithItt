@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Your Firebase configuration
 const firebaseConfig = {
-  REDACTED: "AIzaSyDdHpAHaKM7iV8CdaNfQ4JoWyHmqgEoMGQ",
+  apiKey: "AIzaSyAYt5JoAnWRmZLkrVnkt9P07N4F78IYfZg",
   authDomain: "colorgame-a0c4e.firebaseapp.com",
   projectId: "colorgame-a0c4e",
   storageBucket: "colorgame-a0c4e.firebasestorage.app",
