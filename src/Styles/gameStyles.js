@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 // Common styles
 const commonButtonStyles = {
-  borderRadius: 5,
-  padding: 4,
+  borderRadius: 3,
+  padding: 3,
   elevation: 3,
   marginVertical: 2,
 };
@@ -104,6 +104,11 @@ export const styles = StyleSheet.create({
     marginHorizontal: 5, // Spacing between buttons
     backgroundColor: "transparent", // Removed background color
   },
+  finishGameButton: {
+    ...commonButtonStyles,
+    marginVertical: 20, // Add vertical margin specifically for the Finish Game button
+    backgroundColor: "transparent", // Adjust as needed
+  },
   buttonText: {
     color: "#fff",
     fontSize: 10,
@@ -115,9 +120,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   hintText: {
-    marginTop: 50,
+    marginTop: 10,
     color: "orange",
-    fontSize: 10,
+    fontSize: 13,
+    marginVertical: 50,
   },
   difficultyContainer: {
     flexDirection: "row",
@@ -138,11 +144,11 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: 5,
-    width: "100%", // Full width for horizontal layout
+    marginTop: 0,
+    width: "100%",
     backgroundColor: "#555", // Common background color for all buttons
     padding: 10, // Padding for better spacing
-    borderRadius: 5, // Rounded corners for the layout
+    borderRadius: 3,
   },
   feedbackText: {
     color: "orange",

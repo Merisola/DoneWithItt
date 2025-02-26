@@ -35,8 +35,8 @@ const ColorGame = () => {
 
   const instructionsText = `
     Hello! 
-    አማርኛ እና አማርኛ ለማየት አንድ ሙሉ ስም እና ቀለም ወደ ኋላ ይሄዱ ይኖርብን ወቅታዊ ይደርሳል።
-    (Hint: The first number indicates the amount of RED, the second number indicates the amount of GREEN, while the third number indicates the amount of BLUE.)
+    "Hello! ለ RGB የሚሆኑ ከፍተኛ እና ዝቅተኛ እሴቶችን ለማስገባት እና የሚሆኑ ቀለሞችን ለ ቀለም አስተዳደር እና ቀለም አስተዳደር እንዴት እንደሚሆኑ square RGB እንዴት እንደሚሆኑ ይማሩ።
+(Hint: The first number indicates the amount of RED, the second number indicates the amount of GREEN, while the third number indicates the amount of BLUE.)
   `;
 
   const saveScore = async (userName, score) => {
@@ -157,26 +157,7 @@ const ColorGame = () => {
         </Text>
       </View>
 
-      <TextInput
-        placeholder="Enter your name"
-        value={userName}
-        onChangeText={setUserName}
-        style={styles.input}
-      />
-
-      {/* Button to toggle past scores visibility */}
-      <TouchableOpacity onPress={() => setShowScores(!showScores)}>
-        <Text style={styles.buttonText}>
-          {showScores ? "Hide Past Scores" : "Show Past Scores"}
-        </Text>
-      </TouchableOpacity>
-
-      {/* Fetch Scores Component */}
-      <FetchScores setPlayerScores={setPlayerScores} />
-
-      {/* Conditionally render PastPlayerScores based on showScores state */}
-      {showScores && <PastPlayerScores playerScores={playerScores} />}
-
+      {/* Horizontal Layout */}
       <View style={styles.horizontalLayout}>
         <Animated.View style={{ transform: [{ scale: buttonScale }] }}>
           <TouchableOpacity
@@ -223,6 +204,26 @@ const ColorGame = () => {
         </View>
       </View>
 
+      <TextInput
+        placeholder="Enter your name"
+        value={userName}
+        onChangeText={setUserName}
+        style={styles.input}
+      />
+
+      {/* Button to toggle past scores visibility */}
+      <TouchableOpacity onPress={() => setShowScores(!showScores)}>
+        <Text style={styles.buttonText}>
+          {showScores ? "Hide Past Scores" : "Show Past Scores"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Fetch Scores Component */}
+      <FetchScores setPlayerScores={setPlayerScores} />
+
+      {/* Conditionally render PastPlayerScores based on showScores state */}
+      {showScores && <PastPlayerScores playerScores={playerScores} />}
+
       <FlatList
         data={colorOptions}
         renderItem={({ item }) => (
@@ -265,7 +266,7 @@ const ColorGame = () => {
         {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       </View>
 
-      <TouchableOpacity onPress={finishGame}>
+      <TouchableOpacity onPress={finishGame} style={styles.finishGameButton}>
         <Text style={styles.buttonText}>Finish Game</Text>
       </TouchableOpacity>
 
